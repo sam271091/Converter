@@ -13,7 +13,8 @@ import android.widget.Toast;
 public class CurrencyElement extends AppCompatActivity {
 
     Button buttonSave;
-    TextView txShortName,txFullName;
+    TextView txShortName,txFullName,txRate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class CurrencyElement extends AppCompatActivity {
 
         buttonSave = (Button)findViewById(R.id.buttonSave);
         txShortName =  (TextView)findViewById(R.id.txShortName);
+        txRate =  (TextView)findViewById(R.id.txRate);
         txFullName = (TextView)findViewById(R.id.txFullName);
 
         SetOnClickListener();
@@ -34,7 +36,7 @@ public class CurrencyElement extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (txShortName.getText().toString().equals("") || txFullName.getText().toString().equals("")){
+                if (txShortName.getText().toString().equals("") || txFullName.getText().toString().equals("") || txRate.getText().toString().equals("")){
                     Toast.makeText(CurrencyElement.this,"Fill in  all the fields!",Toast.LENGTH_LONG).show();
                 }else{
                    boolean DataExists = CheckDataExistence();
@@ -65,7 +67,7 @@ public class CurrencyElement extends AppCompatActivity {
 
         }
 
-        return  true;
+        return  false;
     }
 
 
@@ -77,6 +79,7 @@ public class CurrencyElement extends AppCompatActivity {
         ContentValues row = new ContentValues();
         row.put("ShortName", txShortName.getText().toString());
         row.put("FullName",txFullName.getText().toString());
+        row.put("Rate",txRate.getText().toString());
 
         myDB.insert("Currency", null, row);
 

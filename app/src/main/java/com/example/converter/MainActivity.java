@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         DBConnections dbConnections = new DBConnections();
 
-        myDB = openOrCreateDatabase("my.db", MODE_PRIVATE, null);
+        myDB = openOrCreateDatabase("myCurr.db", MODE_PRIVATE, null);
         dbConnections.myDB = myDB;
 
         //myDB.execSQL(

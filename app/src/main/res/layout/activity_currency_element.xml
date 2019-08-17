@@ -33,6 +33,14 @@
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="224dp" />
 
+        <EditText
+            android:id="@+id/txRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Rate"
+            android:inputType="number|numberDecimal" />
+
         <Button
             android:id="@+id/buttonSave"
             android:layout_width="match_parent"
@@ -41,6 +49,7 @@
             android:text="Save"
             app:layout_constraintTop_toBottomOf="@+id/txFullName"
             tools:layout_editor_absoluteX="147dp" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

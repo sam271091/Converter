@@ -1,6 +1,8 @@
 package com.example.converter;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -59,20 +61,38 @@ public class CurrencyList extends AppCompatActivity {
     public void List(){
         HashMap<String, Currency> CurrList = new HashMap<>();
 
-        Currency AZN = new Currency("AZN","Azerbaijan manat",1);
-        Currency USD = new Currency("USD","US dollar",0.7);
-        Currency EUR = new Currency("EUR","EU euro",1.9);
-        Currency GBP = new Currency("GBP","Great Britain pound",2.13);
-        Currency RUB = new Currency("RUB","Russian rouble",0.027);
-        Currency JPY = new Currency("JPY","Japaneese yen",1.57);
+        //Currency AZN = new Currency("AZN","Azerbaijan manat",1);
+        //Currency USD = new Currency("USD","US dollar",0.7);
+        //Currency EUR = new Currency("EUR","EU euro",1.9);
+        //Currency GBP = new Currency("GBP","Great Britain pound",2.13);
+        //Currency RUB = new Currency("RUB","Russian rouble",0.027);
+        //Currency JPY = new Currency("JPY","Japaneese yen",1.57);
 
 
-        CurrList.put(AZN.getShortName(), AZN);
-        CurrList.put(USD.getShortName(), USD);
-        CurrList.put(EUR.getShortName(), EUR);
-        CurrList.put(GBP.getShortName(), GBP);
-        CurrList.put(RUB.getShortName(), RUB);
-        CurrList.put(JPY.getShortName(), JPY);
+        DBConnections dbConnections = new DBConnections();
+
+        SQLiteDatabase myDB = openOrCreateDatabase("myCurr.db", MODE_PRIVATE, null);
+        dbConnections.myDB = myDB;
+
+        Cursor myCursor = myDB.rawQuery("select ShortName, FullName,Rate from Currency", null);
+
+        while(myCursor.moveToNext()) {
+            String ShortName = myCursor.getString(0);
+            String FullName = myCursor.getString(1);
+            String    Rate = myCursor.getString(2);
+
+            Currency currency = new Currency(ShortName,FullName,Double.parseDouble(Rate));
+
+            CurrList.put(currency.getShortName(), currency);
+        }
+
+
+        //CurrList.put(AZN.getShortName(), AZN);
+        //CurrList.put(USD.getShortName(), USD);
+        //CurrList.put(EUR.getShortName(), EUR);
+        //CurrList.put(GBP.getShortName(), GBP);
+        //CurrList.put(RUB.getShortName(), RUB);
+        //CurrList.put(JPY.getShortName(), JPY);
 
         List<HashMap<String, String>> listItems = new ArrayList<>();
         SimpleAdapter adapter = new SimpleAdapter(this, listItems, R.layout.list_item,
