@@ -122,6 +122,15 @@ public class CurrencyList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap val = (HashMap)ListView.getItemAtPosition(position);
                 Toast.makeText(CurrencyList.this,"Позиция: " + position + ",Значение: " + val.get("First Line") ,Toast.LENGTH_SHORT).show();
+
+                Currency currency = new Currency();
+
+                //Currency currencyGetCurrencyByShortName(val.get("First Line"));
+                Currency Curr = currency.GetCurrencyByShortName((String) val.get("First Line"));
+
+                Intent  intent = new Intent(".CurrencyElement");
+                intent.putExtra("Object",Curr);
+                startActivity(intent);
             }
         });
 

@@ -1,6 +1,7 @@
 package com.example.converter;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,16 @@ public class CurrencyElement extends AppCompatActivity {
 
         SetOnClickListener();
 
+
+        Intent i = getIntent();
+        Currency Curr = (Currency)i.getSerializableExtra("Object");
+
+        if (Curr!=null) {
+            txShortName.setText(Curr.ShortName);
+            txFullName.setText(Curr.FullName);
+            txRate.setText(Double.toString(Curr.Rate));
+        }
+
     }
 
     public  void SetOnClickListener(){
@@ -39,7 +50,7 @@ public class CurrencyElement extends AppCompatActivity {
                 if (txShortName.getText().toString().equals("") || txFullName.getText().toString().equals("") || txRate.getText().toString().equals("")){
                     Toast.makeText(CurrencyElement.this,"Fill in  all the fields!",Toast.LENGTH_LONG).show();
                 }else{
-                   boolean DataExists = CheckDataExistence();
+                   boolean DataExists = CheckDataExistence(txShortName.getText().toString());
                    if (!DataExists){
                        AddDataToDataBase();
                    }else {
@@ -53,17 +64,20 @@ public class CurrencyElement extends AppCompatActivity {
 
 
 
-    public  boolean CheckDataExistence(){
+    public  boolean CheckDataExistence(String ShortName){
 
         DBConnections dbConnections = new DBConnections();
         SQLiteDatabase myDB = dbConnections.myDB;
 
-        Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency ", null);
+        Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency  WHERE ShortName = ?",new String[]{ShortName});
+
+
 
         while(myCursor.moveToNext()) {
            // String name = myCursor.getString(0);
             //String email = myCursor.getString(1);
 
+            return true;
 
         }
 

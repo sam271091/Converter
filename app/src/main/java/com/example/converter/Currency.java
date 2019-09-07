@@ -1,6 +1,11 @@
 package com.example.converter;
 
-public class Currency {
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.io.Serializable;
+
+public class Currency  implements Serializable{
 
     public  String ShortName;
     public  String FullName;
@@ -43,6 +48,33 @@ public class Currency {
 
     public  void setFullName(String fullName) {
         FullName = fullName;
+    }
+
+
+
+    public   Currency GetCurrencyByShortName(String ShortName){
+
+        DBConnections dbConnections = new DBConnections();
+        SQLiteDatabase myDB = dbConnections.myDB;
+
+        Cursor myCursor = myDB.rawQuery("select ShortName, FullName,Rate from Currency  WHERE ShortName = ?",new String[]{ShortName});
+
+
+
+        while(myCursor.moveToNext()) {
+             String SName = myCursor.getString(0);
+             String FullName = myCursor.getString(1);
+             String Rate = myCursor.getString(2);
+
+            Currency currency = new Currency(SName,FullName,Double.parseDouble(Rate));
+
+            return currency;
+
+        }
+
+        Currency currency = new Currency();
+
+        return currency;
     }
 
 
