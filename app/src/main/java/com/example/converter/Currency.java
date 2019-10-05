@@ -1,5 +1,6 @@
 package com.example.converter;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -57,7 +58,14 @@ public class Currency  implements Serializable{
         DBConnections dbConnections = new DBConnections();
         SQLiteDatabase myDB = dbConnections.myDB;
 
-        Cursor myCursor = myDB.rawQuery("select ShortName, FullName,Rate from Currency  WHERE ShortName = ?",new String[]{ShortName});
+        //Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,Rates.Rate FROM Currency LEFT JOIN Rates ON Currency.ShortName = Rates.ShortName  WHERE Currency.ShortName = ?",new String[]{ShortName});
+
+        myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
+        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate  FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+        //myDB.execSQL("SELECT Rates.ShortName,Rates.Rate into TempTableRates FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+
+
+        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName WHERE Currency.ShortName = ?", new String[]{ShortName});
 
 
 
@@ -75,6 +83,36 @@ public class Currency  implements Serializable{
         Currency currency = new Currency();
 
         return currency;
+    }
+
+    public  void AddDataToDataBase(String ShortName,String FullName){
+
+        DBConnections dbConnections = new DBConnections();
+        SQLiteDatabase myDB = dbConnections.myDB;
+
+        ContentValues row = new ContentValues();
+        row.put("ShortName", ShortName);
+        row.put("FullName",FullName);
+        //row.put("Rate",txRate.getText().toString());
+
+        myDB.insert("Currency", null, row);
+
+
+    }
+
+    public  void AddRatesDataToDataBase(String ShortName,String Rate,Long datetime){
+
+        DBConnections dbConnections = new DBConnections();
+        SQLiteDatabase myDB = dbConnections.myDB;
+
+        ContentValues row = new ContentValues();
+        row.put("ShortName", ShortName);
+        row.put("Rate",Rate);
+        row.put("Date",datetime);
+
+        myDB.insert("Rates", null, row);
+
+
     }
 
 

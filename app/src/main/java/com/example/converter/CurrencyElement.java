@@ -11,10 +11,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+
 public class CurrencyElement extends AppCompatActivity {
 
     Button buttonSave;
     TextView txShortName,txFullName,txRate;
+    boolean NewObject;
+    String RateOnStart;
 
 
     @Override
@@ -30,9 +36,15 @@ public class CurrencyElement extends AppCompatActivity {
 
         SetOnClickListener();
 
+        RateOnStart = txRate.getText().toString();
+
 
         Intent i = getIntent();
         Currency Curr = (Currency)i.getSerializableExtra("Object");
+
+         NewObject = (boolean) i.getBooleanExtra("NewObject",false);
+
+
 
         if (Curr!=null) {
             txShortName.setText(Curr.ShortName);
@@ -51,8 +63,22 @@ public class CurrencyElement extends AppCompatActivity {
                     Toast.makeText(CurrencyElement.this,"Fill in  all the fields!",Toast.LENGTH_LONG).show();
                 }else{
                    boolean DataExists = CheckDataExistence(txShortName.getText().toString());
+
+                   if (RateOnStart != txRate.getText().toString()){
+                       DataExists = false;
+                   }
+
                    if (!DataExists){
-                       AddDataToDataBase();
+                       Currency Curr = new Currency();
+                       Long currentTime = Calendar.getInstance().getTimeInMillis();
+                       if (NewObject==true) {
+                           Curr.AddDataToDataBase(txShortName.getText().toString(), txFullName.getText().toString());
+                           Curr.AddRatesDataToDataBase(txShortName.getText().toString(), txRate.getText().toString(),currentTime);
+                       }else {
+
+                           Curr.AddRatesDataToDataBase(txShortName.getText().toString(), txRate.getText().toString(),currentTime);
+                       };
+                       finish();
                    }else {
                        Toast.makeText(CurrencyElement.this,"Currency already exists! ",Toast.LENGTH_LONG).show();
                    }
@@ -85,20 +111,7 @@ public class CurrencyElement extends AppCompatActivity {
     }
 
 
-    public  void AddDataToDataBase(){
 
-        DBConnections dbConnections = new DBConnections();
-        SQLiteDatabase myDB = dbConnections.myDB;
-
-        ContentValues row = new ContentValues();
-        row.put("ShortName", txShortName.getText().toString());
-        row.put("FullName",txFullName.getText().toString());
-        row.put("Rate",txRate.getText().toString());
-
-        myDB.insert("Currency", null, row);
-
-
-    }
 
 
 

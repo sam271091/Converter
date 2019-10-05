@@ -17,7 +17,12 @@ public class DBConnections extends AppCompatActivity {
 
     public void CreateCurrencyTable(){
         myDB.execSQL(
-                "CREATE TABLE IF NOT EXISTS Currency (ShortName VARCHAR(200), FullName VARCHAR(200),Rate VARCHAR(200))");
+                "CREATE TABLE IF NOT EXISTS Currency (ShortName VARCHAR(200), FullName VARCHAR(200))");
+    }
+
+    public void CreateRatesTable(){
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS Rates (ShortName VARCHAR(200), Rate VARCHAR(200),Date INTEGER)");
     }
 
 }

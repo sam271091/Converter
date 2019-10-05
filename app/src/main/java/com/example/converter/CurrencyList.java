@@ -49,6 +49,7 @@ public class CurrencyList extends AppCompatActivity {
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         //.setAction("Action", null).show();
                 Intent  intent = new Intent(".CurrencyElement");
+                intent.putExtra("NewObject",true);
                 startActivity(intent);;
 
             }
@@ -74,7 +75,15 @@ public class CurrencyList extends AppCompatActivity {
         SQLiteDatabase myDB = openOrCreateDatabase("myCurr.db", MODE_PRIVATE, null);
         dbConnections.myDB = myDB;
 
-        Cursor myCursor = myDB.rawQuery("select ShortName, FullName,Rate from Currency", null);
+        //Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency", null);
+        //Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,Rates.Rate FROM Currency LEFT JOIN Rates ON Currency.ShortName = Rates.ShortName", null);
+        myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
+        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate  FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+        //myDB.execSQL("SELECT Rates.ShortName,Rates.Rate into TempTableRates FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+
+
+        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName", null);
+        //myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
 
         while(myCursor.moveToNext()) {
             String ShortName = myCursor.getString(0);
