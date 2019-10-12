@@ -21,6 +21,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,7 +56,12 @@ public class MainActivity extends AppCompatActivity {
         AddButtonListener();
 
 //        try {
-            startSendHttpRequestThread("https://www.cbar.az/currencies/20.09.2019.xml");
+
+         Long currentTime = Calendar.getInstance().getTimeInMillis();
+         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+         String currentDateandTime = sdf.format(currentTime);
+
+            startSendHttpRequestThread("https://www.cbar.az/currencies/" + currentDateandTime + ".xml");
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -106,14 +114,34 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < nodes.getLength(); i++) {
                         Element element = (Element) nodes.item(i);
                         NodeList title = element.getElementsByTagName("Valute");
-                        Element line = (Element) title.item(0);
+
                         String Type = element.getAttribute("Type");
 
-                        if (Type == "Xarici valyutalar"){
+                        if (Type.toString().equals("Xarici valyutalar") ){
+
+                            for (int j=0;j<=title.getLength();j++){
+                                Element line = (Element) title.item(j);
+
+                                NodeList ChildNodes = line.getChildNodes();
+
+                                Element Nominal = (Element) ChildNodes.item(1);
+
+                                String NominalValue  = Nominal.getChildNodes().item(0).getNodeValue();
+
+                                Element Name = (Element) ChildNodes.item(3);
+
+                                String NameValue  = Name.getChildNodes().item(0).getNodeValue();
+
+                                Element Value = (Element) ChildNodes.item(5);
+
+                                String Curr =  Value.getChildNodes().item(0).getNodeValue();
+
+                                int b =0;
+                            }
 
                         }
 
-                        int b =0;
+
 
                     }
 
