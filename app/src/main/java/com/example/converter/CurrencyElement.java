@@ -62,15 +62,22 @@ public class CurrencyElement extends AppCompatActivity {
                 if (txShortName.getText().toString().equals("") || txFullName.getText().toString().equals("") || txRate.getText().toString().equals("")){
                     Toast.makeText(CurrencyElement.this,"Fill in  all the fields!",Toast.LENGTH_LONG).show();
                 }else{
-                   boolean DataExists = CheckDataExistence(txShortName.getText().toString());
+
+                    Currency Curr = new Currency();
+                   boolean DataExists = Curr.CheckDataExistence(txShortName.getText().toString());
 
                    if (RateOnStart != txRate.getText().toString()){
                        DataExists = false;
                    }
 
                    if (!DataExists){
-                       Currency Curr = new Currency();
-                       Long currentTime = Calendar.getInstance().getTimeInMillis();
+
+                       //Long currentTime = Calendar.getInstance().getTimeInMillis();
+
+                       TimeAndDate timeAndDate = new TimeAndDate();
+
+                       Long currentTime = timeAndDate.getStartOfTheDay(timeAndDate.getCurrentDate());
+
                        if (NewObject==true) {
                            Curr.AddDataToDataBase(txShortName.getText().toString(), txFullName.getText().toString());
                            Curr.AddRatesDataToDataBase(txShortName.getText().toString(), txRate.getText().toString(),currentTime);
@@ -90,25 +97,7 @@ public class CurrencyElement extends AppCompatActivity {
 
 
 
-    public  boolean CheckDataExistence(String ShortName){
 
-        DBConnections dbConnections = new DBConnections();
-        SQLiteDatabase myDB = dbConnections.myDB;
-
-        Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency  WHERE ShortName = ?",new String[]{ShortName});
-
-
-
-        while(myCursor.moveToNext()) {
-           // String name = myCursor.getString(0);
-            //String email = myCursor.getString(1);
-
-            return true;
-
-        }
-
-        return  false;
-    }
 
 
 

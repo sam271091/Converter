@@ -115,6 +115,51 @@ public class Currency  implements Serializable{
 
     }
 
+    public  boolean CheckDataExistence(String ShortName){
+
+        DBConnections dbConnections = new DBConnections();
+        SQLiteDatabase myDB = dbConnections.myDB;
+
+        Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency  WHERE ShortName = ?",new String[]{ShortName});
+
+
+
+        while(myCursor.moveToNext()) {
+            // String name = myCursor.getString(0);
+            //String email = myCursor.getString(1);
+
+            return true;
+
+        }
+
+        return  false;
+    }
+
+
+    public  boolean CheckRatesDataExistence(String ShortName,String Rate,Long Date){
+
+        DBConnections dbConnections = new DBConnections();
+        SQLiteDatabase myDB = dbConnections.myDB;
+
+        Cursor myCursor = myDB.rawQuery("select ShortName, Rate,Date  from Rates  WHERE ShortName = ? and " +
+                "Rate = ? and " +
+                "Date = ?",new String[]{ShortName,Rate, String.valueOf(Date)});
+
+
+
+        while(myCursor.moveToNext()) {
+            // String name = myCursor.getString(0);
+            //String email = myCursor.getString(1);
+
+            return true;
+
+        }
+
+        return  false;
+    }
+
+
+
 
 
 }
