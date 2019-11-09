@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     SQLiteDatabase myDB;
     Button ActionopenCurrList;
+    TextView Val1;
+    ImageView OpenCL;
 
 
     private Handler mHandler = new Handler();
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         ActionopenCurrList = (Button)findViewById(R.id.OpenCurrList);
 
+        Val1 = (TextView)findViewById(R.id.Val1);
+
+        OpenCL = (ImageView)findViewById(R.id.OpenCL);
 
         AddButtonListener();
 
@@ -98,6 +105,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void AddButtonListener(){
         ActionopenCurrList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(".CurrencyList");
+                startActivity(intent);
+            }
+        });
+
+        Val1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(".CurrencyList");
+                startActivity(intent);
+            }
+        });
+
+        OpenCL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(".CurrencyList");
