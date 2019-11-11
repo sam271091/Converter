@@ -181,6 +181,8 @@ public class NetWork {
 
         Currency Curr = new Currency();
 
+        LoadedCurr.add(new Currency("AZN","Azərbaycan manatı",1));
+
         for (int i = 0; i <= LoadedCurr.size()-1;i++) {
 
             Currency E = LoadedCurr.get(i);

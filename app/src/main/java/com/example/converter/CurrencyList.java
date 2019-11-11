@@ -27,6 +27,8 @@ public class CurrencyList extends AppCompatActivity {
 
 
      ListView ListView;
+     Boolean SelectMode;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,8 @@ public class CurrencyList extends AppCompatActivity {
 
 
 
-
+        Intent I = getIntent();
+        SelectMode =  I.getBooleanExtra("SelectMode",false);
 
 
 
@@ -145,9 +148,17 @@ public class CurrencyList extends AppCompatActivity {
                 //Currency currencyGetCurrencyByShortName(val.get("First Line"));
                 Currency Curr = currency.GetCurrencyByShortName((String) val.get("First Line"));
 
-                Intent  intent = new Intent(".CurrencyElement");
-                intent.putExtra("Object",Curr);
-                startActivity(intent);
+               if (!SelectMode){
+                   Intent  intent = new Intent(".CurrencyElement");
+                   intent.putExtra("Object",Curr);
+                   startActivity(intent);
+               } else {
+                   Intent intent = new Intent();
+                   intent.putExtra("Curr", Curr);
+                   setResult(RESULT_OK, intent);
+                   finish();
+               }
+
             }
         });
 

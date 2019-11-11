@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,9 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
     SQLiteDatabase myDB;
     Button ActionopenCurrList;
-    TextView Val1;
+    TextView Val1,Val2;
+    EditText  Sum;
+    double Rate;
     ImageView OpenCL;
-
+    NetWork network = new NetWork();
 
     private Handler mHandler = new Handler();
 
@@ -60,19 +63,27 @@ public class MainActivity extends AppCompatActivity {
 
 //        dbConnections.myDB.close();
 
-        ActionopenCurrList = (Button)findViewById(R.id.OpenCurrList);
+        //ActionopenCurrList = (Button)findViewById(R.id.OpenCurrList);
+
+
+        network.UpdateCurrency();
 
         Val1 = (TextView)findViewById(R.id.Val1);
+
+        Val2 = (TextView)findViewById(R.id.Val2);
+
+        Sum = (EditText)findViewById(R.id.Sum);
+
+        Sum.setText("0.0");
 
         OpenCL = (ImageView)findViewById(R.id.OpenCL);
 
         AddButtonListener();
 
-        NetWork network = new NetWork();
-        network.UpdateCurrency();
-        network.LoadData();
 
-        //mHandler.postDelayed(LoadDataRunnable, 100);
+
+
+        mHandler.postDelayed(LoadDataRunnable, 2000);
 
 //        try {
 
@@ -89,8 +100,11 @@ public class MainActivity extends AppCompatActivity {
     private Runnable LoadDataRunnable = new Runnable() {
         public void run() {
 
-            NetWork network = new NetWork();
-            network.UpdateCurrency();
+            network.LoadData();
+
+            Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
+
+            Val2.setText(AZN.getShortName());
 
             //mHandler.postDelayed(this, 200);
         }
@@ -104,19 +118,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void AddButtonListener(){
-        ActionopenCurrList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(".CurrencyList");
-                startActivity(intent);
-            }
-        });
+//        ActionopenCurrList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(".CurrencyList");
+//                startActivity(intent);
+//            }
+//        });
 
         Val1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(".CurrencyList");
-                startActivity(intent);
+                intent.putExtra("SelectMode",true);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -129,6 +144,52 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+
+                Currency Curr = (Currency)data.getSerializableExtra("Curr");
+                Val1.setText(Curr.getShortName() + " " + Curr.getFullName());
+            }
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+//        savedInstanceState.putBoolean("MyBoolean", true);
+          savedInstanceState.putDouble("Sum", Double.parseDouble(Sum.getText().toString()));
+//        savedInstanceState.putInt("MyInt", 1);
+        savedInstanceState.putString("Val1", Val1.getText().toString());
+        savedInstanceState.putString("Val2", Val2.getText().toString());
+        // etc.
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+//        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
+//        double myDouble = savedInstanceState.getDouble("myDouble");
+//        int myInt = savedInstanceState.getInt("MyInt");
+        String StringVal1 = savedInstanceState.getString("Val1");
+        Val1.setText(StringVal1);
+        String StringVal2 = savedInstanceState.getString("Val2");
+        Val2.setText(StringVal2);
+
+        double myDouble = savedInstanceState.getDouble("Sum");
+        //Sum.setText(Double.toString(myDouble));
     }
 
 }
