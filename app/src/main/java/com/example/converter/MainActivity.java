@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase myDB;
     Button ActionopenCurrList;
     TextView Val1,Val2;
-    EditText  Sum;
+    EditText  Sum,Result;
     double Rate;
     ImageView OpenCL;
     NetWork network = new NetWork();
@@ -74,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         Sum = (EditText)findViewById(R.id.Sum);
 
+        Result = (EditText)findViewById(R.id.Result);
+
         Sum.setText("0.0");
 
         OpenCL = (ImageView)findViewById(R.id.OpenCL);
@@ -81,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         AddButtonListener();
 
 
+        Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
+
+        Val2.setText(AZN.getShortName());
 
 
         mHandler.postDelayed(LoadDataRunnable, 2000);
@@ -97,14 +104,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private void Calculate(){
+
+        double s = Double.parseDouble(Sum.getText().toString());
+
+
+        double Res;
+
+        try {
+            Res = s * Rate;
+        }
+        catch(IllegalArgumentException e) {
+            Res = 0.0;
+        }
+
+        Result.setText(Double.toString(Res));
+    }
+
+
+
     private Runnable LoadDataRunnable = new Runnable() {
         public void run() {
 
             network.LoadData();
 
-            Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
 
-            Val2.setText(AZN.getShortName());
 
             //mHandler.postDelayed(this, 200);
         }
@@ -132,8 +157,34 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(".CurrencyList");
                 intent.putExtra("SelectMode",true);
                 startActivityForResult(intent,1);
+
             }
         });
+
+        Sum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //double S = Double.parseDouble(Sum.getText().toString());
+                if (s=="0"){
+                    Sum.setText("0.0");
+                    Sum.selectAll();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                Calculate();
+            }
+        });
+
+
+
 
         OpenCL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Currency Curr = (Currency)data.getSerializableExtra("Curr");
                 Val1.setText(Curr.getShortName() + " " + Curr.getFullName());
+                Rate = Curr.getRate();
+                Calculate();
             }
         }
     }
