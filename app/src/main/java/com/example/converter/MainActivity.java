@@ -107,7 +107,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void Calculate(){
 
-        double s = Double.parseDouble(Sum.getText().toString());
+        String SumValue = Sum.getText().toString();
+
+        if (SumValue.equals("")){
+            SumValue = "0.0";
+        }
+
+        double s = Double.parseDouble(SumValue);
 
 
         double Res;
@@ -169,11 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //double S = Double.parseDouble(Sum.getText().toString());
-                if (s=="0"){
-                    Sum.setText("0.0");
-                    Sum.selectAll();
-                }
+
             }
 
             @Override

@@ -141,7 +141,7 @@ public class CurrencyList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap val = (HashMap)ListView.getItemAtPosition(position);
-                Toast.makeText(CurrencyList.this,"Позиция: " + position + ",Значение: " + val.get("First Line") ,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CurrencyList.this,"Позиция: " + position + ",Значение: " + val.get("First Line") ,Toast.LENGTH_SHORT).show();
 
                 Currency currency = new Currency();
 
