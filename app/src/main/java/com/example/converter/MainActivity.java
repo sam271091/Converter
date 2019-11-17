@@ -38,11 +38,14 @@ import javax.xml.parsers.ParserConfigurationException;
 public class MainActivity extends AppCompatActivity {
 
     SQLiteDatabase myDB;
-    Button ActionopenCurrList;
+//    Button ActionopenCurrList;
     TextView Val1,Val2;
     EditText  Sum,Result;
     double Rate;
-    ImageView OpenCL;
+    ImageView OpenCL,Switcher;
+    boolean switcherActive;
+    Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
+
     NetWork network = new NetWork();
 
     private Handler mHandler = new Handler();
@@ -82,15 +85,20 @@ public class MainActivity extends AppCompatActivity {
 
         OpenCL = (ImageView)findViewById(R.id.OpenCL);
 
+        Switcher = (ImageView)findViewById(R.id.Switcher);
+
         AddButtonListener();
 
 
-        Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
+
 
         Val2.setText(AZN.getShortName());
 
 
         mHandler.postDelayed(LoadDataRunnable, 2000);
+
+
+        SetClickable();
 
 //        try {
 
@@ -119,7 +127,11 @@ public class MainActivity extends AppCompatActivity {
         double Res;
 
         try {
-            Res = s * Rate;
+            if (!switcherActive) {
+                Res = s * Rate;
+            } else Res = s / Rate;
+
+
         }
         catch(IllegalArgumentException e) {
             Res = 0.0;
@@ -167,6 +179,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Val2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(".CurrencyList");
+                intent.putExtra("SelectMode",true);
+                startActivityForResult(intent,1);
+
+            }
+        });
+
+
+
         Sum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -196,9 +220,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Switcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (switcherActive){
+                    switcherActive = false;
+                    Val1.setText(Val2.getText());
+                    Val2.setText(AZN.getShortName());
+                } else {
+                    switcherActive = true;
+                    Val2.setText(Val1.getText());
+                    Val1.setText(AZN.getShortName());
+                }
+
+                SetClickable();
+
+                Calculate();
+            }
+        });
 
     }
 
+
+    public void SetClickable(){
+        Val1.setClickable(!switcherActive);
+        Val2.setClickable(switcherActive);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -208,7 +255,10 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 Currency Curr = (Currency)data.getSerializableExtra("Curr");
-                Val1.setText(Curr.getShortName() + " " + Curr.getFullName());
+                if (!switcherActive){
+                    Val1.setText(Curr.getShortName() + " " + Curr.getFullName());
+                } else Val2.setText(Curr.getShortName() + " " + Curr.getFullName());
+
                 Rate = Curr.getRate();
                 Calculate();
             }

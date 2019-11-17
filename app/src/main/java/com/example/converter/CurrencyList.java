@@ -89,7 +89,7 @@ public class CurrencyList extends AppCompatActivity {
         //Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency", null);
         //Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,Rates.Rate FROM Currency LEFT JOIN Rates ON Currency.ShortName = Rates.ShortName", null);
         myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
-        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate  FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate  FROM Rates WHERE (Rates.ShortName,Rates.Date) IN (SELECT Rates.ShortName,max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
         //myDB.execSQL("SELECT Rates.ShortName,Rates.Rate into TempTableRates FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
 
 
