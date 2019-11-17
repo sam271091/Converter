@@ -76,7 +76,7 @@ public class CurrencyElement extends AppCompatActivity {
 
                        TimeAndDate timeAndDate = new TimeAndDate();
 
-                       Long currentTime = timeAndDate.getStartOfTheDay(timeAndDate.getCurrentDate());
+                       Long currentTime = timeAndDate.getCurrentDate();
 
                        if (NewObject==true) {
                            Curr.AddDataToDataBase(txShortName.getText().toString(), txFullName.getText().toString());

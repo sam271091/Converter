@@ -223,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
 //        savedInstanceState.putBoolean("MyBoolean", true);
-          savedInstanceState.putDouble("Sum", Double.parseDouble(Sum.getText().toString()));
+        savedInstanceState.putDouble("Rate", Rate);
+        savedInstanceState.putDouble("Sum", Double.parseDouble(Sum.getText().toString()));
 //        savedInstanceState.putInt("MyInt", 1);
         savedInstanceState.putString("Val1", Val1.getText().toString());
         savedInstanceState.putString("Val2", Val2.getText().toString());
@@ -238,13 +239,14 @@ public class MainActivity extends AppCompatActivity {
 //        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
 //        double myDouble = savedInstanceState.getDouble("myDouble");
 //        int myInt = savedInstanceState.getInt("MyInt");
+        Rate = savedInstanceState.getDouble("Rate");
         String StringVal1 = savedInstanceState.getString("Val1");
         Val1.setText(StringVal1);
         String StringVal2 = savedInstanceState.getString("Val2");
         Val2.setText(StringVal2);
 
         double myDouble = savedInstanceState.getDouble("Sum");
-        //Sum.setText(Double.toString(myDouble));
+        Sum.setText(Double.toString(myDouble));
     }
 
 }
