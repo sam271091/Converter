@@ -1,6 +1,7 @@
 package com.example.converter;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
@@ -16,8 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
 
 
 
@@ -35,6 +38,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView OpenCL,Switcher;
     boolean switcherActive;
     Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
+
+    Currency CurrentCurrency;
 
     NetWork network = new NetWork();
 
@@ -108,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         SetClickable();
 
-        MakeGraph();
+//        MakeGraph();
 
 //        try {
 
@@ -125,22 +131,91 @@ public class MainActivity extends AppCompatActivity {
 
     private void MakeGraph(){
         GraphView graph = (GraphView)findViewById(R.id.graph);
-        double x,y;
-        x= -5.0;
+//        double x,y;
+//        x= -5.0;
+//
+//
+        graph.removeAllSeries();
+//        series = new LineGraphSeries<DataPoint>();
+//
+////
+//
+//        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(0, 1),
+//                new DataPoint(1, 5),
+//                new DataPoint(2, 3),
+//                new DataPoint(3, 2),
+//                new DataPoint(4, 6)
+//        });
+//
+//
+//        graph.addSeries(series);
+
+        // generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
 
 
-        series = new LineGraphSeries<DataPoint>();
 
-        for (int i =0;i<500;i++){
-            x = x + 0.1;
-            y = Math.sin(x);
 
-            series.appendData(new DataPoint(x,y),true,500);
+
+        Cursor myCursor = CurrentCurrency.GetRatesAndDatesByCurr(CurrentCurrency.getShortName());
+
+        DataPoint[] dp = new DataPoint[myCursor.getCount()];
+
+        int i = 0;
+
+        TimeAndDate TD = new TimeAndDate();
+
+        Date FirstDate = new Date();
+
+        Date LastDate = new Date();
+
+        while(myCursor.moveToNext()) {
+            String SName = myCursor.getString(0);
+            String Rate = myCursor.getString(1);
+            long DateInt = myCursor.getLong(2);
+
+
+//            TD.getStartOfTheDay(DateInt);
+
+            Date date = new Date(DateInt);
+
+            dp[i] = new DataPoint(date.getTime(), Double.parseDouble(Rate));
+
+            i = i + 1;
+
+            if (i==1){
+                FirstDate = date;
+            }else if(i==myCursor.getCount()) {
+                LastDate = date;
+            }
+
+
         }
 
-
+// you can directly pass Date objects to DataPoint-Constructor
+// this will convert the Date to double via Date#getTime()
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
 
         graph.addSeries(series);
+
+// set date label formatter
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(myCursor.getCount()); // only 4 because of the space
+
+// set manual x bounds to have nice steps
+        graph.getViewport().setMinX(FirstDate.getTime());
+        graph.getViewport().setMaxX(LastDate.getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+
+// as we use dates as labels, the human rounding to nice readable numbers
+// is not necessary
+        graph.getGridLabelRenderer().setHumanRounding(false);
     }
 
 
@@ -291,8 +366,11 @@ public class MainActivity extends AppCompatActivity {
                     Val1.setText(Curr.getShortName() + " " + Curr.getFullName());
                 } else Val2.setText(Curr.getShortName() + " " + Curr.getFullName());
 
+                CurrentCurrency = Curr;
+
                 Rate = Curr.getRate();
                 Calculate();
+                MakeGraph();
             }
         }
     }

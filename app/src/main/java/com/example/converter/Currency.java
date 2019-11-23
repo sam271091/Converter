@@ -69,6 +69,7 @@ public class Currency  implements Serializable{
 
 
 
+
         while(myCursor.moveToNext()) {
              String SName = myCursor.getString(0);
              String FullName = myCursor.getString(1);
@@ -84,6 +85,19 @@ public class Currency  implements Serializable{
 
         return currency;
     }
+
+
+    public Cursor GetRatesAndDatesByCurr(String ShortName){
+        DBConnections dbConnections = new DBConnections();
+        SQLiteDatabase myDB = dbConnections.myDB;
+
+        Cursor myCursor = myDB.rawQuery("SELECT Rates.ShortName,Rates.Rate,Rates.Date from Rates WHERE ShortName = ?", new String[]{ShortName});
+
+        return myCursor;
+
+    }
+
+
 
     public  void AddDataToDataBase(String ShortName,String FullName){
 
