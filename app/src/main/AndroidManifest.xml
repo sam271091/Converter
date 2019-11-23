@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CurrencyElement">
-            android:label="@string/title_activity_currency_list"
+
 
             <intent-filter>
                 <action android:name=".CurrencyElement" />

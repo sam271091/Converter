@@ -15,6 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -49,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     NetWork network = new NetWork();
 
     private Handler mHandler = new Handler();
+
+    LineGraphSeries<DataPoint> series;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
 
         SetClickable();
 
+        MakeGraph();
+
 //        try {
 
 
@@ -111,6 +121,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    private void MakeGraph(){
+        GraphView graph = (GraphView)findViewById(R.id.graph);
+        double x,y;
+        x= -5.0;
+
+
+        series = new LineGraphSeries<DataPoint>();
+
+        for (int i =0;i<500;i++){
+            x = x + 0.1;
+            y = Math.sin(x);
+
+            series.appendData(new DataPoint(x,y),true,500);
+        }
+
+
+
+        graph.addSeries(series);
+    }
+
 
 
     private void Calculate(){
@@ -272,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
-//        savedInstanceState.putBoolean("MyBoolean", true);
+       savedInstanceState.putBoolean("switcherActive", switcherActive);
         savedInstanceState.putDouble("Rate", Rate);
         savedInstanceState.putDouble("Sum", Double.parseDouble(Sum.getText().toString()));
 //        savedInstanceState.putInt("MyInt", 1);
@@ -286,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         // Restore UI state from the savedInstanceState.
         // This bundle has also been passed to onCreate.
-//        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
+          switcherActive = savedInstanceState.getBoolean("switcherActive");
 //        double myDouble = savedInstanceState.getDouble("myDouble");
 //        int myInt = savedInstanceState.getInt("MyInt");
         Rate = savedInstanceState.getDouble("Rate");
