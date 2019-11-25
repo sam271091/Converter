@@ -131,6 +131,8 @@
         android:layout_height="120dp"
         android:layout_marginTop="265dp"
         android:background="@color/colorWhite"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 

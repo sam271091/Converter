@@ -36,6 +36,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     double Rate;
     ImageView OpenCL,Switcher;
     boolean switcherActive;
+    GraphView graph;
     Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
 
     Currency CurrentCurrency;
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
 
     LineGraphSeries<DataPoint> series;
+
+    DecimalFormat precision = new DecimalFormat("0.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
 
         Switcher = (ImageView)findViewById(R.id.Switcher);
 
+        graph = (GraphView)findViewById(R.id.graph);
+
+        graph.removeAllSeries();
+
         AddButtonListener();
 
 
@@ -130,50 +139,34 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void MakeGraph(){
-        GraphView graph = (GraphView)findViewById(R.id.graph);
-//        double x,y;
-//        x= -5.0;
+
 //
 //
-        graph.removeAllSeries();
-//        series = new LineGraphSeries<DataPoint>();
 //
-////
-//
-//        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//                new DataPoint(0, 1),
-//                new DataPoint(1, 5),
-//                new DataPoint(2, 3),
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 6)
-//        });
-//
-//
-//        graph.addSeries(series);
+         graph.removeAllSeries();
 
-        // generate Dates
-        Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d2 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d3 = calendar.getTime();
+         if (CurrentCurrency != null) {
+             Cursor myCursor = CurrentCurrency.GetRatesAndDatesByCurr(CurrentCurrency.getShortName());
+
+             CreateGraph(myCursor);
+         }
 
 
 
+    }
 
 
-        Cursor myCursor = CurrentCurrency.GetRatesAndDatesByCurr(CurrentCurrency.getShortName());
-
+    private void CreateGraph(Cursor myCursor){
         DataPoint[] dp = new DataPoint[myCursor.getCount()];
 
         int i = 0;
 
-        TimeAndDate TD = new TimeAndDate();
+//        TimeAndDate TD = new TimeAndDate();
 
         Date FirstDate = new Date();
 
         Date LastDate = new Date();
+
 
         while(myCursor.moveToNext()) {
             String SName = myCursor.getString(0);
@@ -181,9 +174,13 @@ public class MainActivity extends AppCompatActivity {
             long DateInt = myCursor.getLong(2);
 
 
-//            TD.getStartOfTheDay(DateInt);
 
-            Date date = new Date(DateInt);
+
+            Date date = new Date(DateInt*1000);
+
+
+//
+
 
             dp[i] = new DataPoint(date.getTime(), Double.parseDouble(Rate));
 
@@ -198,27 +195,23 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-// you can directly pass Date objects to DataPoint-Constructor
-// this will convert the Date to double via Date#getTime()
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
+
+        series = new LineGraphSeries<>(dp);
 
         graph.addSeries(series);
 
-// set date label formatter
+
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
         graph.getGridLabelRenderer().setNumHorizontalLabels(myCursor.getCount()); // only 4 because of the space
 
-// set manual x bounds to have nice steps
+
         graph.getViewport().setMinX(FirstDate.getTime());
         graph.getViewport().setMaxX(LastDate.getTime());
         graph.getViewport().setXAxisBoundsManual(true);
 
-// as we use dates as labels, the human rounding to nice readable numbers
-// is not necessary
+
         graph.getGridLabelRenderer().setHumanRounding(false);
     }
-
-
 
     private void Calculate(){
 
@@ -244,7 +237,9 @@ public class MainActivity extends AppCompatActivity {
             Res = 0.0;
         }
 
-        Result.setText(Double.toString(Res));
+
+
+        Result.setText(precision.format(Res));
     }
 
 
@@ -388,6 +383,8 @@ public class MainActivity extends AppCompatActivity {
 //        savedInstanceState.putInt("MyInt", 1);
         savedInstanceState.putString("Val1", Val1.getText().toString());
         savedInstanceState.putString("Val2", Val2.getText().toString());
+        savedInstanceState.putSerializable("CurrentCurrency",CurrentCurrency);
+
         // etc.
     }
 
@@ -405,8 +402,13 @@ public class MainActivity extends AppCompatActivity {
         String StringVal2 = savedInstanceState.getString("Val2");
         Val2.setText(StringVal2);
 
+        CurrentCurrency = (Currency)savedInstanceState.getSerializable("CurrentCurrency");
+
         double myDouble = savedInstanceState.getDouble("Sum");
         Sum.setText(Double.toString(myDouble));
+
+
+        MakeGraph();
     }
 
 }
