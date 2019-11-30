@@ -17,10 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class CurrencyList extends AppCompatActivity {
 
@@ -93,7 +95,7 @@ public class CurrencyList extends AppCompatActivity {
         //myDB.execSQL("SELECT Rates.ShortName,Rates.Rate into TempTableRates FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
 
 
-        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName", null);
+        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName ORDER BY Currency.ShortName", null);
         //myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
 
         while(myCursor.moveToNext()) {
@@ -106,6 +108,9 @@ public class CurrencyList extends AppCompatActivity {
             CurrList.put(currency.getShortName(), currency);
         }
 
+
+        TreeMap<String, Currency> sorted = new TreeMap<>();
+        sorted.putAll(CurrList);
 
         //CurrList.put(AZN.getShortName(), AZN);
         //CurrList.put(USD.getShortName(), USD);
@@ -120,7 +125,8 @@ public class CurrencyList extends AppCompatActivity {
                 new int[]{R.id.text1, R.id.text_2,R.id.text3});
 
 
-        Iterator it = CurrList.entrySet().iterator();
+
+        Iterator it = sorted.entrySet().iterator();
         while (it.hasNext())
         {
             HashMap<String, String> resultsMap = new HashMap<>();
@@ -133,6 +139,8 @@ public class CurrencyList extends AppCompatActivity {
             resultsMap.put("Third Line", Double.toString(Cur.getRate()));
             listItems.add(resultsMap);
         }
+
+
 
         ListView.setAdapter(adapter);
 
@@ -153,10 +161,18 @@ public class CurrencyList extends AppCompatActivity {
                    intent.putExtra("Object",Curr);
                    startActivity(intent);
                } else {
-                   Intent intent = new Intent();
-                   intent.putExtra("Curr", Curr);
-                   setResult(RESULT_OK, intent);
-                   finish();
+
+
+                   if (!Curr.getShortName().equals("AZN") ){
+                       Intent intent = new Intent();
+                       intent.putExtra("Curr", Curr);
+                       setResult(RESULT_OK, intent);
+                       finish();
+                   } else {
+                       Toast.makeText(CurrencyList.this,"The currency can not be selected!",Toast.LENGTH_SHORT).show();
+                   }
+
+
                }
 
             }

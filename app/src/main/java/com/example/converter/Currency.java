@@ -39,6 +39,8 @@ public class Currency  implements Serializable{
         return ShortName;
     }
 
+
+
     public  void setShortName(String shortName) {
         ShortName = shortName;
     }
@@ -65,7 +67,7 @@ public class Currency  implements Serializable{
         //myDB.execSQL("SELECT Rates.ShortName,Rates.Rate into TempTableRates FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
 
 
-        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName WHERE Currency.ShortName = ?", new String[]{ShortName});
+        Cursor myCursor = myDB.rawQuery("SELECT  Currency.ShortName,Currency.FullName,TempTableRates.Rate FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName WHERE Currency.ShortName = ? LIMIT 10", new String[]{ShortName});
 
 
 

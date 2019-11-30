@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -36,7 +37,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -67,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     LineGraphSeries<DataPoint> series;
 
-    DecimalFormat precision = new DecimalFormat("0.00");
+    DecimalFormat precision = new DecimalFormat("0.0000");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +200,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
+//
+
+
+
+
         series = new LineGraphSeries<>(dp);
 
         graph.addSeries(series);
@@ -205,12 +216,14 @@ public class MainActivity extends AppCompatActivity {
         graph.getGridLabelRenderer().setNumHorizontalLabels(myCursor.getCount()); // only 4 because of the space
 
 
+
+
         graph.getViewport().setMinX(FirstDate.getTime());
         graph.getViewport().setMaxX(LastDate.getTime());
         graph.getViewport().setXAxisBoundsManual(true);
 
 
-        graph.getGridLabelRenderer().setHumanRounding(false);
+        graph.getGridLabelRenderer().setHumanRounding(true);
     }
 
     private void Calculate(){
