@@ -16,6 +16,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class CurrencyList extends AppCompatActivity {
      ListView ListView;
      Boolean SelectMode;
 
+    DecimalFormat precision = new DecimalFormat("0.0000");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,19 +93,20 @@ public class CurrencyList extends AppCompatActivity {
         //Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency", null);
         //Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,Rates.Rate FROM Currency LEFT JOIN Rates ON Currency.ShortName = Rates.ShortName", null);
         myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
-        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate  FROM Rates WHERE (Rates.ShortName,Rates.Date) IN (SELECT Rates.ShortName,max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate,Rates.Nominal  FROM Rates WHERE (Rates.ShortName,Rates.Date) IN (SELECT Rates.ShortName,max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
         //myDB.execSQL("SELECT Rates.ShortName,Rates.Rate into TempTableRates FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
 
 
-        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName ORDER BY Currency.ShortName", null);
+        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate,TempTableRates.Nominal FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName ORDER BY Currency.ShortName", null);
         //myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
 
         while(myCursor.moveToNext()) {
             String ShortName = myCursor.getString(0);
             String FullName = myCursor.getString(1);
             String    Rate = myCursor.getString(2);
+            String    Nominal = myCursor.getString(3);
 
-            Currency currency = new Currency(ShortName,FullName,Double.parseDouble(Rate));
+            Currency currency = new Currency(ShortName,FullName,Double.parseDouble(Rate),Double.parseDouble(Nominal));
 
             CurrList.put(currency.getShortName(), currency);
         }
@@ -136,7 +139,7 @@ public class CurrencyList extends AppCompatActivity {
             Currency Cur = (Currency) pair.getValue();
 
             resultsMap.put("Second Line", Cur.getFullName().toString());
-            resultsMap.put("Third Line", Double.toString(Cur.getRate()));
+            resultsMap.put("Third Line", precision.format(Cur.getRate()));
             listItems.add(resultsMap);
         }
 

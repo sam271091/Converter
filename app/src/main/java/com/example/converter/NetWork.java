@@ -122,7 +122,7 @@ public class NetWork {
                                 String Curr =  Value.getChildNodes().item(0).getNodeValue();
 
 
-                                LoadedCurr.add(new Currency(Code,NameValue,Double.parseDouble(Curr)));
+                                LoadedCurr.add(new Currency(Code,NameValue,Double.parseDouble(Curr),Double.parseDouble(NominalValue)));
 
 
 
@@ -181,7 +181,7 @@ public class NetWork {
 
         Currency Curr = new Currency();
 
-        LoadedCurr.add(new Currency("AZN","Azərbaycan manatı",1));
+        LoadedCurr.add(new Currency("AZN","Azərbaycan manatı",1,1));
 
         for (int i = 0; i <= LoadedCurr.size()-1;i++) {
 
@@ -197,7 +197,7 @@ public class NetWork {
 
 
             if (!DataExists){
-                Curr.AddRatesDataToDataBase(E.getShortName(),Double.toString(E.getRate()),currentTime);
+                Curr.AddRatesDataToDataBase(E.getShortName(),Double.toString(E.getRate()),currentTime,Double.toString(E.getNominal()));
             }
         }
 

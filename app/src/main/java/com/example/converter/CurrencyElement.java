@@ -48,7 +48,7 @@ public class CurrencyElement extends AppCompatActivity {
 
         if (Curr!=null) {
             txShortName.setText(Curr.ShortName);
-            txFullName.setText(Curr.FullName);
+            txFullName.setText(Curr.getFullName());
             txRate.setText(Double.toString(Curr.Rate));
         }
 
@@ -80,10 +80,10 @@ public class CurrencyElement extends AppCompatActivity {
 
                        if (NewObject==true) {
                            Curr.AddDataToDataBase(txShortName.getText().toString(), txFullName.getText().toString());
-                           Curr.AddRatesDataToDataBase(txShortName.getText().toString(), txRate.getText().toString(),currentTime);
+                           Curr.AddRatesDataToDataBase(txShortName.getText().toString(), txRate.getText().toString(),currentTime,Integer.toString(1));
                        }else {
 
-                           Curr.AddRatesDataToDataBase(txShortName.getText().toString(), txRate.getText().toString(),currentTime);
+                           Curr.AddRatesDataToDataBase(txShortName.getText().toString(), txRate.getText().toString(),currentTime,Integer.toString(1));
                        };
                        finish();
                    }else {

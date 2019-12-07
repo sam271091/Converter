@@ -44,6 +44,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
 //    Button ActionopenCurrList;
     TextView Val1,Val2;
     EditText  Sum,Result;
-    double Rate;
+    double Rate,Nominal;
     ImageView OpenCL,Switcher;
     boolean switcherActive;
     GraphView graph;
-    Currency AZN = new Currency("AZN","Azərbaycan manatı",1);
+    Currency AZN = new Currency("AZN","Azərbaycan manatı",1,1);
 
     Currency CurrentCurrency;
 
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     LineGraphSeries<DataPoint> series;
 
     DecimalFormat precision = new DecimalFormat("0.0000");
+
 
 
     @Override
@@ -104,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
 
         Result = (EditText)findViewById(R.id.Result);
 
-        Sum.setText("0.0");
+        Sum.setText("0.0000");
+        Result.setText("0.0000");
 
         OpenCL = (ImageView)findViewById(R.id.OpenCL);
 
@@ -127,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
 
         SetClickable();
 
+
+
 //        MakeGraph();
 
 //        try {
@@ -140,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
     private void MakeGraph(){
@@ -220,7 +227,22 @@ public class MainActivity extends AppCompatActivity {
 
         graph.getViewport().setMinX(FirstDate.getTime());
         graph.getViewport().setMaxX(LastDate.getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setXAxisBoundsManual(false);
+
+
+        graph.getViewport().setScalable(true);
+
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
+
+        graph.setTitle("The dynamics of changes for the period: " +
+                dateFormat.format(FirstDate.getTime()) + "-" + dateFormat.format(LastDate.getTime()) );
+
+
+
+
+
+
+
 
 
         graph.getGridLabelRenderer().setHumanRounding(true);
@@ -241,8 +263,8 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             if (!switcherActive) {
-                Res = s * Rate;
-            } else Res = s / Rate;
+                Res = s * Rate/Nominal;
+            } else Res = s / Rate*Nominal;
 
 
         }
@@ -377,6 +399,7 @@ public class MainActivity extends AppCompatActivity {
                 CurrentCurrency = Curr;
 
                 Rate = Curr.getRate();
+                Nominal = Curr.getNominal();
                 Calculate();
                 MakeGraph();
             }
@@ -392,6 +415,7 @@ public class MainActivity extends AppCompatActivity {
         // killed and restarted.
        savedInstanceState.putBoolean("switcherActive", switcherActive);
         savedInstanceState.putDouble("Rate", Rate);
+        savedInstanceState.putDouble("Nominal", Nominal);
         savedInstanceState.putDouble("Sum", Double.parseDouble(Sum.getText().toString()));
 //        savedInstanceState.putInt("MyInt", 1);
         savedInstanceState.putString("Val1", Val1.getText().toString());
@@ -410,6 +434,7 @@ public class MainActivity extends AppCompatActivity {
 //        double myDouble = savedInstanceState.getDouble("myDouble");
 //        int myInt = savedInstanceState.getInt("MyInt");
         Rate = savedInstanceState.getDouble("Rate");
+        Nominal = savedInstanceState.getDouble("Nominal");
         String StringVal1 = savedInstanceState.getString("Val1");
         Val1.setText(StringVal1);
         String StringVal2 = savedInstanceState.getString("Val2");
@@ -420,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
         double myDouble = savedInstanceState.getDouble("Sum");
         Sum.setText(Double.toString(myDouble));
 
+        SetClickable();
 
         MakeGraph();
     }

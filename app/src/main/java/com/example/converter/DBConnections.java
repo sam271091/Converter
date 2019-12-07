@@ -22,7 +22,7 @@ public class DBConnections extends AppCompatActivity {
 
     public void CreateRatesTable(){
         myDB.execSQL(
-                "CREATE TABLE IF NOT EXISTS Rates (ShortName VARCHAR(200), Rate VARCHAR(200),Date INTEGER)");
+                "CREATE TABLE IF NOT EXISTS Rates (ShortName VARCHAR(200), Rate VARCHAR(200),Nominal VARCHAR(200),Date INTEGER)");
     }
 
 }
