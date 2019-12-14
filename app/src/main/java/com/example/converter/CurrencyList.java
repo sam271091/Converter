@@ -1,6 +1,7 @@
 package com.example.converter;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -124,16 +125,26 @@ public class CurrencyList extends AppCompatActivity {
 
         List<HashMap<String, String>> listItems = new ArrayList<>();
         SimpleAdapter adapter = new SimpleAdapter(this, listItems, R.layout.list_item,
-                new String[]{"First Line", "Second Line","Third Line"},
-                new int[]{R.id.text1, R.id.text_2,R.id.text3});
+                new String[]{"Flag","First Line", "Second Line","Third Line"},
+                new int[]{R.id.flagPic,R.id.text1, R.id.text_2,R.id.text3});
 
 
+        Resources resources = getResources();
 
         Iterator it = sorted.entrySet().iterator();
         while (it.hasNext())
         {
             HashMap<String, String> resultsMap = new HashMap<>();
             Map.Entry pair = (Map.Entry)it.next();
+
+            final int resourceId = resources.getIdentifier( "ic_" + pair.getKey().toString().toLowerCase() , "drawable",
+                    getPackageName());
+
+            if (resourceId!=0) {
+                resultsMap.put("Flag",String.valueOf(resourceId));
+            }
+
+
             resultsMap.put("First Line", pair.getKey().toString());
 
             Currency Cur = (Currency) pair.getValue();
