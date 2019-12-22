@@ -92,4 +92,5 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="Hint">choose value</string>
+    <string name="Search">type to search</string>
 </resources>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class CurrencyList extends AppCompatActivity {
 
      ListView ListView;
      Boolean SelectMode;
+     SearchView SearchField;
 
     DecimalFormat precision = new DecimalFormat("0.0000");
 
@@ -45,7 +47,7 @@ public class CurrencyList extends AppCompatActivity {
         setTitle("Currency list");
 
         ListView = (ListView)findViewById(R.id.ListView);
-
+        SearchField = (SearchView)findViewById(R.id.search_view);
 
         List();
 
