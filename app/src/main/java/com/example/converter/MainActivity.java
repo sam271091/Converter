@@ -262,9 +262,11 @@ public class MainActivity extends AppCompatActivity {
         double Res;
 
         try {
-            if (!switcherActive) {
-                Res = s * Rate/Nominal;
-            } else Res = s / Rate*Nominal;
+            if (Nominal !=0){
+                if (!switcherActive) {
+                    Res = s * Rate/Nominal;
+                } else Res = s / Rate*Nominal;
+            } else Res = 0;
 
 
         }

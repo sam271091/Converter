@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,8 @@ public class CurrencyList extends AppCompatActivity {
      ListView ListView;
      Boolean SelectMode;
      SearchView SearchField;
+     SQLiteDatabase myDB;
+
 
     DecimalFormat precision = new DecimalFormat("0.0000");
 
@@ -49,6 +52,12 @@ public class CurrencyList extends AppCompatActivity {
         ListView = (ListView)findViewById(R.id.ListView);
         SearchField = (SearchView)findViewById(R.id.search_view);
 
+
+        DBConnections dbConnections = new DBConnections();
+
+        myDB = openOrCreateDatabase("myCurr.db", MODE_PRIVATE, null);
+        dbConnections.myDB = myDB;
+
         List();
 
 
@@ -57,21 +66,41 @@ public class CurrencyList extends AppCompatActivity {
         SelectMode =  I.getBooleanExtra("SelectMode",false);
 
 
+        SetListener();
 
 
+
+    }
+
+
+
+    public  void SetListener(){
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        //.setAction("Action", null).show();
+                //.setAction("Action", null).show();
                 Intent  intent = new Intent(".CurrencyElement");
                 intent.putExtra("NewObject",true);
                 startActivity(intent);;
 
             }
         });
+
+        SearchField.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
     }
 
 
@@ -88,10 +117,7 @@ public class CurrencyList extends AppCompatActivity {
         //Currency JPY = new Currency("JPY","Japaneese yen",1.57);
 
 
-        DBConnections dbConnections = new DBConnections();
 
-        SQLiteDatabase myDB = openOrCreateDatabase("myCurr.db", MODE_PRIVATE, null);
-        dbConnections.myDB = myDB;
 
         //Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency", null);
         //Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,Rates.Rate FROM Currency LEFT JOIN Rates ON Currency.ShortName = Rates.ShortName", null);
