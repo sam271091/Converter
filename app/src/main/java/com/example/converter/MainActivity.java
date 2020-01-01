@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        graph.getGridLabelRenderer().setNumHorizontalLabels(myCursor.getCount()); // only 4 because of the space
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
 
 
 
