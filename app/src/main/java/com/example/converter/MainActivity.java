@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     LineGraphSeries<DataPoint> series;
 
-    DecimalFormat precision = new DecimalFormat("0.0000");
+
+    DecimalFormat precision = new DecimalFormat("#,##0.0000");
 
 
 
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         myDB = openOrCreateDatabase("myCurr.db", MODE_PRIVATE, null);
         dbConnections.myDB = myDB;
+
+        //precision.setGroupingUsed(false);
 
         //myDB.execSQL(
                 //"CREATE TABLE IF NOT EXISTS Currency (ShortName VARCHAR(200), FullName VARCHAR(200))");

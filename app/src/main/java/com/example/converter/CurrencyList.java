@@ -58,7 +58,7 @@ public class CurrencyList extends AppCompatActivity {
         myDB = openOrCreateDatabase("myCurr.db", MODE_PRIVATE, null);
         dbConnections.myDB = myDB;
 
-        List();
+        FillTheList("");
 
 
 
@@ -69,6 +69,27 @@ public class CurrencyList extends AppCompatActivity {
         SetListener();
 
 
+
+    }
+
+
+    public void FillTheList(String searchVal) {
+
+        Cursor myCursor;
+
+        myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
+        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate,Rates.Nominal  FROM Rates WHERE (Rates.ShortName,Rates.Date) IN (SELECT Rates.ShortName,max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+
+
+        if (searchVal.equals("")) {
+             myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate,TempTableRates.Nominal FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName ORDER BY Currency.ShortName", null);
+        } else {
+
+            myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate,TempTableRates.Nominal FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName WHERE FullName LIKE ? ORDER BY Currency.ShortName", new String[]{"%" + searchVal +'%'});
+        }
+
+
+        List(myCursor);
 
     }
 
@@ -97,6 +118,12 @@ public class CurrencyList extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                ListView.setAdapter(null);
+                if (newText.length() > 2) {
+                    FillTheList(newText);
+                } else {
+                    FillTheList("");
+                }
                 return false;
             }
         });
@@ -106,7 +133,7 @@ public class CurrencyList extends AppCompatActivity {
 
 
 
-    public void List(){
+    public void List(Cursor myCursor){
         HashMap<String, Currency> CurrList = new HashMap<>();
 
         //Currency AZN = new Currency("AZN","Azerbaijan manat",1);
@@ -121,12 +148,12 @@ public class CurrencyList extends AppCompatActivity {
 
         //Cursor myCursor = myDB.rawQuery("select ShortName, FullName from Currency", null);
         //Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,Rates.Rate FROM Currency LEFT JOIN Rates ON Currency.ShortName = Rates.ShortName", null);
-        myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
-        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate,Rates.Nominal  FROM Rates WHERE (Rates.ShortName,Rates.Date) IN (SELECT Rates.ShortName,max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
+        //myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
+        //myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate,Rates.Nominal  FROM Rates WHERE (Rates.ShortName,Rates.Date) IN (SELECT Rates.ShortName,max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
         //myDB.execSQL("SELECT Rates.ShortName,Rates.Rate into TempTableRates FROM Rates WHERE Rates.Date IN (SELECT max(Rates.Date) FROM Rates GROUP BY Rates.ShortName)");
 
 
-        Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate,TempTableRates.Nominal FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName ORDER BY Currency.ShortName", null);
+        //Cursor myCursor = myDB.rawQuery("SELECT Currency.ShortName,Currency.FullName,TempTableRates.Rate,TempTableRates.Nominal FROM Currency LEFT JOIN TempTableRates ON Currency.ShortName = TempTableRates.ShortName ORDER BY Currency.ShortName", null);
         //myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
 
         while(myCursor.moveToNext()) {
