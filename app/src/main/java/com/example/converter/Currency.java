@@ -187,7 +187,7 @@ public class Currency   implements Serializable{
         DBConnections dbConnections = new DBConnections();
         SQLiteDatabase myDB = dbConnections.myDB;
 
-        Cursor myCursor = myDB.rawQuery("SELECT Rates.ShortName,Rates.Rate,Rates.Date from Rates WHERE ShortName = ? LIMIT 3", new String[]{ShortName});
+        Cursor myCursor = myDB.rawQuery("SELECT Rates.ShortName,Rates.Rate,Rates.Date from Rates WHERE ShortName = ? LIMIT 4", new String[]{ShortName});
 
         return myCursor;
 

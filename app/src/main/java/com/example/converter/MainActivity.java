@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     DecimalFormat precision = new DecimalFormat("#,##0.0000");
 
-
+    SimpleDateFormat sdf = new SimpleDateFormat(" dd.MM.YYYY");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +222,22 @@ public class MainActivity extends AppCompatActivity {
         graph.addSeries(series);
 
 
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+
+        //graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) {
+                    return sdf.format(value);
+                } else {
+                    return super.formatLabel(value, isValueX);
+                }
+            }
+        });
+
+
+
         graph.getGridLabelRenderer().setNumHorizontalLabels(myCursor.getCount()); // only 4 because of the space
 
 
@@ -241,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 dateFormat.format(FirstDate.getTime()) + "-" + dateFormat.format(LastDate.getTime()) );
 
 
-
+        graph.getGridLabelRenderer().setHorizontalLabelsAngle(1);
 
 
 
