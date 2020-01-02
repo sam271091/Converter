@@ -9,138 +9,141 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/OpenCL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/background_light"
+            android:backgroundTint="@color/colorWhite"
+            app:fabSize="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_clist"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:id="@+id/Val1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="127dp"
-            tools:layout_editor_absoluteY="0dp">
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/OpenCL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:background="@android:color/background_light"
-                android:backgroundTint="@color/colorWhite"
-                app:fabSize="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/ic_clist"
-                tools:layout_editor_absoluteY="16dp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="5dp"
+            android:width="2000dp"
+            android:height="30dp"
+            android:background="@android:color/background_light"
+            android:hint="@string/Hint"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/Val1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/Val2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginRight="5dp"
-                android:width="2000dp"
-                android:height="30dp"
-                android:background="@android:color/background_light"
-                android:hint="@string/Hint"
-                android:textAllCaps="false"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginRight="5dp"
+            android:width="2000dp"
+            android:height="30dp"
+            android:background="@android:color/background_light"
+            android:hint="@string/Hint"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/Val2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+    </LinearLayout>
 
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="35dp"
-                android:layout_marginRight="5dp"
-                android:width="2000dp"
-                android:height="30dp"
-                android:background="@android:color/background_light"
-                android:hint="@string/Hint"
-                android:textAllCaps="false"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/Switcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:backgroundTint="@color/colorWhite"
+        android:tint="@color/colorPrimaryDark"
+        app:fabSize="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_switch" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/Switcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="170dp"
-                android:layout_marginTop="25dp"
-                android:backgroundTint="@color/colorWhite"
-                android:tint="@color/colorPrimaryDark"
-                app:fabSize="normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Val2"
-                app:srcCompat="@drawable/ic_switch" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="260dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout3"
+        tools:layout_editor_absoluteX="0dp">
 
-            <EditText
-                android:id="@+id/Sum"
-                android:layout_width="match_parent"
-                android:layout_height="39dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginRight="5dp"
-                android:width="1000dp"
-                android:height="30dp"
-                android:background="@android:color/background_light"
-                android:ems="10"
-                android:inputType="number|numberDecimal"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/Sum"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:width="1000dp"
+            android:height="30dp"
+            android:background="@android:color/background_light"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/Result"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
+        <EditText
+            android:id="@+id/Result"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
 
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginRight="5dp"
-                android:width="1000dp"
-                android:height="30dp"
-                android:background="@android:color/background_light"
-                android:clickable="false"
-                android:enabled="false"
-                android:inputType="number|numberDecimal"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Sum" />
-
-
-        </LinearLayout>
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="5dp"
+            android:width="1000dp"
+            android:height="30dp"
+            android:background="@android:color/background_light"
+            android:clickable="false"
+            android:enabled="false"
+            android:inputType="number|numberDecimal"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Sum" />
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_margin="5dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="280dp"
             android:layout_weight="1"
             android:background="@color/colorWhite"
             android:padding="5dp"

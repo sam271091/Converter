@@ -139,22 +139,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Sum" />
 
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/graph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:padding="5dp"
+                tools:layout_editor_absoluteX="9dp"
+                tools:layout_editor_absoluteY="431dp" />
+
 
         </LinearLayout>
-
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/graph"
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:background="@color/colorWhite"
-            android:padding="5dp"
-            tools:layout_editor_absoluteX="9dp"
-            tools:layout_editor_absoluteY="431dp" />
 
     </LinearLayout>
 
