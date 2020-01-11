@@ -3,6 +3,7 @@ package com.example.converter;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -219,7 +220,17 @@ public class MainActivity extends AppCompatActivity {
 
         series = new LineGraphSeries<>(dp);
 
+
+        series.setAnimated(true);
+        series.setColor(Color.GREEN);
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(12);
+        series.setThickness(8);
+
+
+
         graph.addSeries(series);
+
 
 
 
