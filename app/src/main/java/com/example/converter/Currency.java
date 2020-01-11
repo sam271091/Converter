@@ -187,7 +187,10 @@ public class Currency   implements Serializable{
         DBConnections dbConnections = new DBConnections();
         SQLiteDatabase myDB = dbConnections.myDB;
 
-        Cursor myCursor = myDB.rawQuery("SELECT Rates.ShortName,Rates.Rate,Rates.Date from Rates WHERE ShortName = ? LIMIT 3", new String[]{ShortName});
+        myDB.execSQL("DROP TABLE IF EXISTS TempTableRates");
+        myDB.execSQL("create temporary table TempTableRates AS SELECT Rates.ShortName,Rates.Rate,Rates.Date from Rates WHERE ShortName = ? order by Rates.Date  DESC LIMIT 3",new String[]{ShortName});
+
+        Cursor myCursor = myDB.rawQuery("SELECT TempTableRates.ShortName,TempTableRates.Rate,TempTableRates.Date from TempTableRates  order by TempTableRates.Date  ASC", null);
 
         return myCursor;
 
@@ -253,8 +256,8 @@ public class Currency   implements Serializable{
         SQLiteDatabase myDB = dbConnections.myDB;
 
         Cursor myCursor = myDB.rawQuery("select ShortName, Rate,Date,Nominal  from Rates  WHERE ShortName = ? and " +
-                "Rate = ? and " +
-                "Date = ?",new String[]{ShortName,Rate, String.valueOf(Date)});
+                //"Rate = ? and " +
+                "Date = ?",new String[]{ShortName, String.valueOf(Date)});
 
 
 
