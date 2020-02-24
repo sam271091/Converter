@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
         Switcher = (ImageView)findViewById(R.id.Switcher);
 
-        graph = (GraphView)findViewById(R.id.graph);
+        graph = (GraphView) findViewById(R.id.graph);
 
         graph.removeAllSeries();
 
@@ -174,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
     private void CreateGraph(Cursor myCursor){
         DataPoint[] dp = new DataPoint[myCursor.getCount()];
 
+        TimeAndDate timeAndDate = new TimeAndDate();
+
         int i = 0;
 
 //        TimeAndDate TD = new TimeAndDate();
@@ -189,9 +191,10 @@ public class MainActivity extends AppCompatActivity {
             long DateInt = myCursor.getLong(2);
 
 
+            DateInt = timeAndDate.getStartOfTheDay(DateInt);
 
 
-            Date date = new Date(DateInt*1000);
+            Date date = new Date(DateInt);
 
 
 //
